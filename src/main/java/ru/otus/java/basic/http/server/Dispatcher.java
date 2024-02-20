@@ -13,6 +13,7 @@ public class Dispatcher {
 
     public Dispatcher() {
         this.router = new HashMap<>();
+        this.router.put("/json", new JsonRequestProcessor());
         this.router.put("GET /add", new OperationAddRequestProcessor());
         this.router.put("GET /hello_world", new HelloWorldRequestProcessor());
         this.router.put("POST /body", new PostBodyDemoRequestProcessor());
@@ -24,6 +25,7 @@ public class Dispatcher {
             unknownRequestProcessor.execute(httpRequest, output);
             return;
         }
-        router.get(httpRequest.getRoute()).execute(httpRequest, output);
+        RequestProcessor requestProcessor = router.get(httpRequest.getUri());
+        requestProcessor.execute(httpRequest, output);
     }
 }
